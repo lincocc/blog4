@@ -1,0 +1,28 @@
+{% extends 'blog/base.html' %}
+{% block title %}My Blog{% endblock %}
+{% load paginator %}
+{% block body %}
+    {% for post in posts %}
+    <article class="post">
+        <header class="entry-header">
+            <h3 class="entry-title">
+                <a href="{{ post.get_absolute_url }}">{{ post.title }}</a>
+            </h3>
+            <div class="entry-meta">
+                <span class="post-category"><a href="{{ post.category.get_absolute_url }}">{{ post.category.name }}</a></span>
+                <span class="post-date"><a href="#"><time class="entry-date">{{ post.created_time }}</time></a></span>
+                <span class="post-author"><a href="#">{{ post.author }}</a></span>
+                <span class="comments-link"><a href="#">4 评论</a></span>
+                <span class="views-count"><a href="#">{{ post.views }}</a></span>
+            </div>
+        </header>
+        <div class="entry-content clearfix">
+            <p>{{ post.excerpt }}</p>
+            <div class="read-more cl-effect-14">
+                <a href="#" class="more-link">继续阅读 <span class="meta-nav">→</span></a>
+            </div>
+        </div>
+    </article>
+    {% endfor %}
+    {% pagination %}
+{% endblock %}

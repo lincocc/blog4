@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="cn">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Blog{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% load static %}
+    <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    {#    <link href="{% static 'blog/css/custom.css' %}" rel="stylesheet">#}
+    {% block beforehead %}{% endblock %}
+</head>
+{% load post_tags %}
+<body>
+<div class="container">
+    <div class="row">
+        {% block navbar %}
+            <nav class="navbar navbar-default">
+                <div class="container-fluid">
+                    <div>
+                        <ul class="nav navbar-nav">
+                            <li><a href="{% url 'blog:index' %}">Blog</a></li>
+                            <li><a href="{% url 'blog:tag' %}">Tag</a></li>
+                            <li><a href="{% url 'blog:category' %}">Category</a></li>
+                            <li><a href="{% url 'blog:archive' %}">Archive</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+        {% endblock %}
+    </div>
+</div>
+<div class="content-body container">
+    <div class="row">
+        <div class="col-md-9">
+            {% block body %}{% endblock %}
+        </div>
+        <div class="col-md-3">
+            {% block sidebar %}
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">BLOG</h3>
+                    </div>
+                    {% get_posts 5 as recent_post %}
+                    <ul class="list-group">
+                        {% for p in recent_post %}
+                            <li class="list-group-item"><a href="{{ p.get_absolute_url }}">{{ p.title }}</a></li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">TAG</h3>
+                    </div>
+                    {% get_tags as tags %}
+                    <div class="panel-body">
+                        {% for t in tags %}
+                            <span><a href="{{ t.get_absolute_url }}">{{ t.name }}</a></span>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">CATEGORY</h3>
+                    </div>
+                    {% get_categories as categories %}
+                    <ul class="list-group">
+                        {% for c in categories %}
+                            <li class="list-group-item"><a href="{{ c.get_absolute_url }}">{{ c.name }}</a></li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">ARCHIVE</h3>
+                    </div>
+                    <ul class="list-group">
+                        {% get_posts as posts %}
+                        {% regroup posts by created_time.year as posts_by_year %}
+                        {% for year in posts_by_year %}
+                            {% regroup year.list by created_time.month as posts_by_month %}
+                            {% for month in posts_by_month %}
+                                <li class="list-group-item"><a href="{% url 'blog:archive' %}#{{ year.grouper }}{{ month.grouper|stringformat:'02d' }}">
+                                    {{ year.grouper }}-{{ month.grouper|stringformat:"02d" }}</a>
+                                </li>
+                            {% endfor %}
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endblock %}
+        </div>
+    </div>
+</div>
+</body>
+<script src="https://cdn.bootcss.com/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</html>

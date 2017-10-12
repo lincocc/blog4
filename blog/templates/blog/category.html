@@ -1,0 +1,36 @@
+{% extends 'blog/base.html' %}
+{% block title %}My Blog{% endblock %}
+{% block body %}
+{#    <ul>#}
+{#        {% for category in categories %}#}
+{#            <li id="{{ category.name }}">{{ category.name }}#}
+{#                <ul>#}
+{#                    {% for post in category.post_set.all %}#}
+{#                        <li><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></li>#}
+{#                    {% endfor %}#}
+{#                </ul>#}
+{#            </li>#}
+{#        {% endfor %}#}
+{#    </ul>#}
+
+    <div class="panel-group" id="accordion">
+    {% for category in categories %}
+        <div class="panel panel-default" id="{{ category.name }}">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a data-toggle="collapse" data-parent="" href="#_{{ category.name }}">{{ category.name }}</a>
+                </h4>
+            </div>
+            <div id="_{{ category.name }}" class="panel-collapse collapse in">
+{#                <div class="panel-body">#}
+                    <ul class="list-group">
+                        {% for post in category.post_set.all %}
+                            <li class="list-group-item"><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></li>
+                        {% endfor %}
+                    </ul>
+{#                </div>#}
+            </div>
+        </div>
+    {% endfor %}
+    </div>
+{% endblock %}

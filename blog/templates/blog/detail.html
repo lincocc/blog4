@@ -1,0 +1,14 @@
+{% extends 'blog/base.html' %}
+{% block title %}{{ post.title }}{% endblock %}
+{% block beforehead %}
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'blog/css/highlights/code.css' %}" />
+{% endblock %}
+{% block body %}
+    <h2>{{ post.title }}</h2>
+    <div>
+        <span>{{ post.views }}</span>
+        <span>{{ post.created_time }}</span>
+    </div>
+    {{ post.body|safe }}
+{% endblock %}

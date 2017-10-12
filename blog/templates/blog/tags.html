@@ -1,0 +1,24 @@
+{% extends 'blog/base.html' %}
+{% block title %}Tags{% endblock %}
+{% block body %}
+    <div class="panel-group" id="accordion">
+    {% for tag in tags %}
+        <div class="panel panel-default" id="{{ tag.name }}">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a data-toggle="collapse" data-parent="" href="#_{{ tag.name }}">{{ tag.name }}</a>
+                </h4>
+            </div>
+            <div id="_{{ tag.name }}" class="panel-collapse collapse in">
+{#                <div class="panel-body">#}
+                    <ul class="list-group">
+                        {% for post in tag.post_set.all %}
+                            <li class="list-group-item"><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></li>
+                        {% endfor %}
+                    </ul>
+{#                </div>#}
+            </div>
+        </div>
+    {% endfor %}
+    </div>
+{% endblock %}
